@@ -1,4 +1,4 @@
-import { ERROR_MESSAGE } from "./constants.js";
+import { MESSAGE } from "./constants.js";
 
 
 export const getUserName = () => {
@@ -8,6 +8,6 @@ export const getUserName = () => {
             .map((item) => item.split('=')[1]);
         return username;
     } catch (error) {
-        console.log(`${ERROR_MESSAGE.operationFailed}: ${error.message}`);
+        console.log(`${MESSAGE.operationFailed}: ${error.message}`);
     }
 };

@@ -1,5 +1,4 @@
-import { ERROR_MESSAGE } from "./constants.js";
-import { showCurrentDirectory } from "./showCurrentDirectory.js";
+import { MESSAGE } from "./constants.js";
 
 
 export const checkInputFormat = (inputValue) => {
@@ -7,7 +6,7 @@ export const checkInputFormat = (inputValue) => {
     if (inputValue.startsWith('"') && inputValue.endsWith('"')) {
         return true;
     } else {
-        console.log(`${ERROR_MESSAGE.operationFailed}: incorrect format. Please, use ""`);
+        console.log(`${MESSAGE.operationFailed}: incorrect format. Please, use ""`);
         return false;
     }
 }

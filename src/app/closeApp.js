@@ -1,10 +1,10 @@
-import { ERROR_MESSAGE } from "../utils/constants.js";
+import { MESSAGE } from "../utils/constants.js";
 import { userExit } from "../utils/userExit.js";
 
 export const closeApp = async (username, rl) => {
     try {
         rl.on('SIGINT', () => userExit(username, rl));
     } catch (error) {
-        console.log(`${ERROR_MESSAGE.operationFailed}: ${error.message}`);
+        console.log(`${MESSAGE.operationFailed}: ${error.message}`);
     }
 }

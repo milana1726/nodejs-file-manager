@@ -1,4 +1,4 @@
-import { ERROR_MESSAGE } from "../utils/constants.js";
+import { MESSAGE } from "../utils/constants.js";
 import { showCurrentDirectory } from "../utils/showCurrentDirectory.js";
 
 
@@ -7,6 +7,6 @@ export const startApp = (username, currentDirectory) => {
         console.log(`Welcome to the File Manager, ${username}!`);
         showCurrentDirectory(currentDirectory);
     } catch (error) {
-        console.log(`${ERROR_MESSAGE.operationFailed}: ${error.message}`);
+        console.log(`${MESSAGE.operationFailed}: ${error.message}`);
     }
 }

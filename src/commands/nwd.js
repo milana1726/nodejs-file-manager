@@ -1,37 +1,38 @@
 import { lstat, readdir } from 'fs/promises';
 import path from 'path';
-import { ERROR_MESSAGE } from '../utils/constants.js';
-import { checkInputFormat } from '../utils/сheckInputFormat.js';
+import { MESSAGE } from '../utils/constants.js';
+import { checkInputFormat } from '../utils/checkInputFormat.js';
 
 
 export const up = async (currentDirectory) => {
-    const arg = '..';
+    const dirname = '..';
+
     try {
-        const newDirectory = path.resolve(currentDirectory, arg);
+        const newDirectory = path.resolve(currentDirectory, dirname);
         const statDir = await lstat(newDirectory);
         if (statDir.isDirectory()) {
-            console.log(newDirectory);
             return newDirectory;
         }
     } catch (error) {
-        console.log(`${ERROR_MESSAGE.operationFailed}: ${error.message}`);
+        console.log(`${MESSAGE.operationFailed}: ${error.message}`);
     }
 };
 
-export const cd = async (currentDirectory, arg) => {
-    if (!checkInputFormat(arg)) {
+export const cd = async (currentDirectory, dirname) => {
+    if (!checkInputFormat(dirname)) {
         return currentDirectory;
     }
 
-    arg = arg.replace(/"/g, '');
+    dirname = dirname.replace(/"/g, '');
+
     try {
-        const newDirectory = path.resolve(currentDirectory, arg);
+        const newDirectory = path.resolve(currentDirectory, dirname);
         const statDir = await lstat(newDirectory);
         if (statDir.isDirectory()) {
             return newDirectory;
         }
     } catch (error) {
-        console.log(`${ERROR_MESSAGE.operationFailed}: ${error.message}`);
+        console.log(`${MESSAGE.operationFailed}: ${error.message}`);
         return currentDirectory;
     }
 };

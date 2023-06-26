@@ -2,7 +2,8 @@ import { checkArgsCount } from "../utils/checkArgsCount.js";
 import { showCurrentDirectory } from "../utils/showCurrentDirectory.js";
 import { userExit } from "../utils/userExit.js";
 import { up, cd, ls } from "../commands/nwd.js";
-import { ERROR_MESSAGE } from "../utils/constants.js";
+import { MESSAGE } from "../utils/constants.js";
+import { cat, add, rn, cp, mv, rm } from "../commands/fs.js";
 
 
 export const commandsApp = (rl, username, currentDirectory) => {
@@ -34,9 +35,44 @@ export const commandsApp = (rl, username, currentDirectory) => {
                         await ls(currentDirectory);
                     }
                     break;
+                case 'cat':
+                    if (checkArgsCount(inputArgs, 1)) {
+                        await cat(currentDirectory, arg1);
+                    }
+                    break;
+
+                case 'add':
+                    if (checkArgsCount(inputArgs, 1)) {
+                        await add(currentDirectory, arg1);
+                    }
+                    break;
+
+                case 'rn':
+                    if (checkArgsCount(inputArgs, 2)) {
+                        await rn(currentDirectory, arg1, arg2);
+                    }
+                    break;
+
+                case 'cp':
+                    if (checkArgsCount(inputArgs, 2)) {
+                        await cp(currentDirectory, arg1, arg2);
+                    }
+                    break;
+
+                case 'mv':
+                    if (checkArgsCount(inputArgs, 2)) {
+                        await mv(currentDirectory, arg1, arg2);
+                    }
+                    break;
+
+                case 'rm':
+                    if (checkArgsCount(inputArgs, 1)) {
+                        await rm(currentDirectory, arg1);
+                    }
+                    break;
 
                 default:
-                    console.log(`${ERROR_MESSAGE.invalidInput}. Type one of these commands:
+                    console.log(`${MESSAGE.invalidInput}. Type one of these commands:
                         up
                         cd "path_to_directory"
                         ls
@@ -59,6 +95,6 @@ export const commandsApp = (rl, username, currentDirectory) => {
             showCurrentDirectory(currentDirectory);
         });
     } catch (error) {
-        console.log(`${ERROR_MESSAGE.operationFailed}: ${error.message}`);
+        console.log(`${MESSAGE.operationFailed}: ${error.message}`);
     }
 }
