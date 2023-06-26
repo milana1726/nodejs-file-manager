@@ -4,6 +4,7 @@ import { userExit } from "../utils/userExit.js";
 import { up, cd, ls } from "../commands/nwd.js";
 import { MESSAGE } from "../utils/constants.js";
 import { cat, add, rn, cp, mv, rm } from "../commands/fs.js";
+import { hash } from "../commands/hash.js";
 
 
 export const commandsApp = (rl, username, currentDirectory) => {
@@ -68,6 +69,12 @@ export const commandsApp = (rl, username, currentDirectory) => {
                 case 'rm':
                     if (checkArgsCount(inputArgs, 1)) {
                         await rm(currentDirectory, arg1);
+                    }
+                    break;
+
+                case 'hash':
+                    if (checkArgsCount(inputArgs, 1)) {
+                        await hash(currentDirectory, arg1);
                     }
                     break;
 
