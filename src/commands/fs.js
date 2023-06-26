@@ -131,7 +131,7 @@ export const cp = async (currentDirectory, sourceFilename, newDirPath) => {
             const readStream = createReadStream(sourceFilePath);
             const writeStream = createWriteStream(newFilePath, { flags: 'a' });
             await pipeline(readStream, writeStream);
-            console.log(`${MESSAGE.operationSuccessful}`);
+            console.log(MESSAGE.operationSuccessful);
         }
     } catch (error) {
         console.log(`${MESSAGE.operationFailed}: ${error.message}`);
@@ -173,7 +173,7 @@ export const mv = async (currentDirectory, sourceFilename, newDirPath) => {
             const writeStream = createWriteStream(newFilePath, { flags: 'a' });
             await pipeline(readStream, writeStream);
             await remove(sourceFilePath);
-            console.log(`${MESSAGE.operationSuccessful}`);
+            console.log(MESSAGE.operationSuccessful);
         }
     } catch (error) {
         console.log(`${MESSAGE.operationFailed}: ${error.message}`);
@@ -197,7 +197,7 @@ export const rm = async (currentDirectory, filename) => {
         const statFile = await lstat(filePath);
         if (await existsAsync(filePath) && statFile.isFile()) {
             await remove(filePath);
-            console.log(`${MESSAGE.operationSuccessful}`);
+            console.log(MESSAGE.operationSuccessful);
         }
     } catch (error) {
         console.log(`${MESSAGE.operationFailed}: ${error.message}`);

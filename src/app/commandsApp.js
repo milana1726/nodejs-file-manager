@@ -6,6 +6,7 @@ import { MESSAGE } from "../utils/constants.js";
 import { cat, add, rn, cp, mv, rm } from "../commands/fs.js";
 import { hash } from "../commands/hash.js";
 import { osInfo } from "../commands/os.js";
+import { compress, decompress } from "../commands/zip.js";
 
 
 export const commandsApp = (rl, username, currentDirectory) => {
@@ -81,6 +82,16 @@ export const commandsApp = (rl, username, currentDirectory) => {
                 case 'os':
                     if (checkArgsCount(inputArgs, 1)) {
                         osInfo(arg1);
+                    }
+                    break;
+                case 'compress':
+                    if (checkArgsCount(inputArgs, 2)) {
+                        await compress(currentDirectory, arg1, arg2);
+                    }
+                    break;
+                case 'decompress':
+                    if (checkArgsCount(inputArgs, 2)) {
+                        await decompress(currentDirectory, arg1, arg2);
                     }
                     break;
 
