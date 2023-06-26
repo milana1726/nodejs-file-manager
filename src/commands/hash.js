@@ -20,7 +20,8 @@ export const hash = async (currentDirectory, filename) => {
 
     try {
         const statFile = await lstat(filePath);
-        if (await existsAsync(filePath) && statFile.isFile()) {
+        const fileExists = await existsAsync(filePath);
+        if (fileExists && statFile.isFile()) {
             const fileContent = await readFile(filePath);
             const fileHash = createHash('sha256').update(fileContent).digest('hex');
             console.log(fileHash);

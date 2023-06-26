@@ -10,6 +10,7 @@ export const up = async (currentDirectory) => {
     try {
         const newDirectory = path.resolve(currentDirectory, dirname);
         const statDir = await lstat(newDirectory);
+
         if (statDir.isDirectory()) {
             return newDirectory;
         }
@@ -28,6 +29,7 @@ export const cd = async (currentDirectory, dirname) => {
     try {
         const newDirectory = path.resolve(currentDirectory, dirname);
         const statDir = await lstat(newDirectory);
+
         if (statDir.isDirectory()) {
             return newDirectory;
         }

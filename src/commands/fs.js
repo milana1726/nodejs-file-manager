@@ -22,7 +22,8 @@ export const cat = async (currentDirectory, filename) => {
 
     try {
         const statFile = await lstat(filePath);
-        if (await existsAsync(filePath) && statFile.isFile()) {
+        const fileExists = await existsAsync(filePath);
+        if (fileExists && statFile.isFile()) {
             const stream = createReadStream(filePath, { encoding: 'utf8' });
             stream.pipe(process.stdout);
             stream.on("end", () => {
@@ -40,21 +41,27 @@ export const cat = async (currentDirectory, filename) => {
 export const add = async (currentDirectory, filename) => {
     if (!checkInputFormat(filename)) {
         return currentDirectory;
-    }
+      }
 
-    filename = filename.replace(/"/g, '');
+      filename = filename.replace(/"/g, '');
 
-    try {
+      try {
         if (filename.includes('.')) {
             const filePath = path.resolve(currentDirectory, filename);
-            await writeFile(filePath, "", { flag: "wx" });
+            const fileExists = await existsAsync(filePath);
+            if (fileExists) {
+              console.log(`${MESSAGE.operationFailed}: File '${filename}' already exists!`);
+              return;
+            }
+            const writeStream = createWriteStream(filePath);
+            writeStream.end();
             console.log(MESSAGE.operationSuccessful);
         } else {
-            console.log(`${MESSAGE.operationFailed}: insert file name with extension!`);
+          console.log(`${MESSAGE.operationFailed}: insert file name with extension!`);
         }
-    } catch (error) {
+      } catch (error) {
         console.log(`${MESSAGE.operationFailed}: ${error.message}`);
-    }
+      }
 };
 
 export const rn = async (currentDirectory, filename, newFilename) => {
@@ -76,13 +83,13 @@ export const rn = async (currentDirectory, filename, newFilename) => {
         return;
     }
 
-    if (!newFilename.includes('.')) {
-        console.log(`${MESSAGE.operationFailed}: Insert file name with extension!`);
+    if (newFileExists) {
+        console.log(`${MESSAGE.operationFailed}: File '${newFilename}' already exists!`);
         return;
     }
 
-    if (newFileExists) {
-        console.log(`${MESSAGE.operationFailed}: File '${newFilename}' already exists!`);
+    if (!newFilename.includes('.')) {
+        console.log(`${MESSAGE.operationFailed}: Insert file name with extension!`);
         return;
     }
 
@@ -195,7 +202,8 @@ export const rm = async (currentDirectory, filename) => {
 
     try {
         const statFile = await lstat(filePath);
-        if (await existsAsync(filePath) && statFile.isFile()) {
+        const fileExists = await existsAsync(filePath);
+        if (fileExists && statFile.isFile()) {
             await remove(filePath);
             console.log(MESSAGE.operationSuccessful);
         }

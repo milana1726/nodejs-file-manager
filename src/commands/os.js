@@ -3,7 +3,7 @@ import { checkInputFormat } from '../utils/checkInputFormat.js';
 import { MESSAGE } from '../utils/constants.js';
 
 
-export const osOperations = {
+const osOperations = {
     eol() {
         const defaultEOL = JSON.stringify(os.EOL);
         console.log(`Default system EOL is: ${defaultEOL}`);

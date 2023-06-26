@@ -11,6 +11,7 @@ export const compress = async (currentDirectory, filename, archiveName) => {
     if (!checkInputFormat(filename) || !checkInputFormat(archiveName)) {
         return currentDirectory;
     }
+
     filename = filename.replace(/"/g, '');
     archiveName = archiveName.replace(/"/g, '');
 
@@ -23,20 +24,22 @@ export const compress = async (currentDirectory, filename, archiveName) => {
     }
 
     try {
-        if (await existsAsync(compressFilePath)) {
-        console.log(`${MESSAGE.operationFailed}: Archive file '${archiveName}' already exists!`);
-        return;
+        const archiveExists = await existsAsync(compressFilePath);
+
+        if (archiveExists) {
+            console.log(`${MESSAGE.operationFailed}: Archive file '${archiveName}' already exists!`);
+            return;
         }
 
         const statFile = await lstat(filePath);
 
         if (statFile.isFile()) {
-        const brotliCompress = createBrotliCompress();
-        const readStream = createReadStream(filePath);
-        const writeStream = createWriteStream(compressFilePath, { flags: 'a' });
+            const brotliCompress = createBrotliCompress();
+            const readStream = createReadStream(filePath);
+            const writeStream = createWriteStream(compressFilePath, { flags: 'a' });
 
-        await pipeline(readStream, brotliCompress, writeStream);
-        console.log(MESSAGE.operationSuccessful);
+            await pipeline(readStream, brotliCompress, writeStream);
+            console.log(MESSAGE.operationSuccessful);
         }
     } catch (error) {
         console.log(`${MESSAGE.operationFailed}: ${error.message}`);
@@ -47,32 +50,40 @@ export const decompress = async (currentDirectory, archiveName, filename) => {
     if (!checkInputFormat(archiveName) || !checkInputFormat(filename)) {
         return currentDirectory;
     }
+
     archiveName = archiveName.replace(/"/g, '');
     filename = filename.replace(/"/g, '');
 
     const compressFilePath = path.resolve(currentDirectory, archiveName);
     const filePath = path.resolve(currentDirectory, filename);
 
-    if (!filename.includes('.') || !archiveName.includes('.')) {
+    if (!filename.includes('.')) {
         console.log(`${MESSAGE.operationFailed}: Insert file name with extension!`);
         return;
     }
 
-    try {
-        if (await existsAsync(filePath)) {
-        console.log(`${MESSAGE.operationFailed}: File '${filename}' already exists!`);
+    if (!archiveName.includes('.br')) {
+        console.log(`${MESSAGE.operationFailed}:Incorrect format. Use '.br' extension for ${archiveName}`);
         return;
+    }
+
+    try {
+        const fileExists = await existsAsync(filePath);
+
+        if (fileExists) {
+            console.log(`${MESSAGE.operationFailed}: File '${filename}' already exists!`);
+            return;
         }
 
         const statFile = await lstat(compressFilePath);
 
         if (statFile.isFile()) {
-        const brotliDecompress = createBrotliDecompress();
-        const readStream = createReadStream(compressFilePath);
-        const writeStream = createWriteStream(filePath, { flags: 'a' });
+            const brotliDecompress = createBrotliDecompress();
+            const readStream = createReadStream(compressFilePath);
+            const writeStream = createWriteStream(filePath, { flags: 'a' });
 
-        await pipeline(readStream, brotliDecompress, writeStream);
-        console.log(MESSAGE.operationSuccessful);
+            await pipeline(readStream, brotliDecompress, writeStream);
+            console.log(MESSAGE.operationSuccessful);
         }
     } catch (error) {
         console.log(`${MESSAGE.operationFailed}: ${error.message}`);
